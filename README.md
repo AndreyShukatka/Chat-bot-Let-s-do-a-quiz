@@ -36,13 +36,16 @@ pip install -r requirements.txt
 python question_dictionary.py --path --folder
 ```
 * В `--path` указываете путь json файла в формате:`*.json`, по умолчанию `questions_bank.json`
-* В `--folder` указываете папку с которой брать файлы для перевода
+* В `--folder` указываете папку с которой брать файлы для перевода, по умолчанию `questions`
 ## Запуск:
 Запустить телеграм бота:
 ```
-python tg_bot.py
+python tg_bot.py --path
 ```
+* укажите путь json файла в формате:`*.json`, по умолчанию `questions_bank.json`
+
 Запустить бота в VK:
 ```
-python vk_bot.py
+python vk_bot.py --path
 ```
+* укажите путь json файла в формате:`*.json`, по умолчанию `questions_bank.json`
