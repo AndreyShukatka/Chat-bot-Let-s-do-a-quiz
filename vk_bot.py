@@ -1,5 +1,6 @@
 import json
 import logging
+import random
 
 import redis
 import telegram
@@ -9,15 +10,15 @@ from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api.longpoll import VkEventType, VkLongPoll
 from vk_api.utils import get_random_id
 
+
 from log_helpers import TelegramLogsHandler
-from questions_helper import get_answer, get_random_question
 
 logger = logging.getLogger('vk_bot')
 
 
 def handle_new_question_request(event, vk_api, keyboard, redis_db, quiz_bank):
     chat_id = event.user_id
-    question = get_random_question(quiz_bank)
+    question, _ = random.choice(list(quiz_bank.items()))
     redis_db.set(chat_id, question)
     vk_api.messages.send(peer_id=chat_id, random_id=get_random_id(), keyboard=keyboard.get_keyboard(), message=question)
 
@@ -29,7 +30,7 @@ def handle_defeat(event, vk_api, keyboard, redis_db, quiz_bank):
         vk_api.messages.send(peer_id=chat_id, random_id=get_random_id(),
                              keyboard=keyboard.get_keyboard(), message='Нажми на кнопку "Новый вопрос"')
         return
-    answer = get_answer(question, quiz_bank)
+    answer = question.partition('.')[0].partition('(')[0]
     vk_api.messages.send(peer_id=chat_id, random_id=get_random_id(),
                          keyboard=keyboard.get_keyboard(), message=f'Правильный ответ: {answer}')
     handle_new_question_request(event, vk_api, keyboard, redis_db, quiz_bank)
@@ -42,7 +43,7 @@ def handle_solution_attempt(event, vk_api, keyboard, redis_db, quiz_bank):
         vk_api.messages.send(peer_id=chat_id, random_id=get_random_id(),
                              keyboard=keyboard.get_keyboard(), message='Нажми на кнопку "Новый вопрос"')
         return
-    answer = get_answer(question, quiz_bank)
+    answer = question.partition('.')[0].partition('(')[0]
     if answer == event.text:
         message = 'Правильно! Поздравляю! Для следующего вопроса нажми «Новый вопрос»'
         redis_db.set(chat_id, '')

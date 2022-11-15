@@ -1,5 +1,6 @@
 import json
 import logging
+import random
 from functools import partial
 
 import redis
@@ -9,7 +10,7 @@ from telegram.ext import (CommandHandler, ConversationHandler, Filters,
                           MessageHandler, RegexHandler, Updater)
 
 from log_helpers import TelegramLogsHandler
-from questions_helper import get_answer, get_random_question
+
 
 logger = logging.getLogger('tg_bot')
 
@@ -27,7 +28,7 @@ def start(bot, update):
 def handle_new_question_request(bot, update, redis_db, quiz_bank):
     reply_markup = telegram.ReplyKeyboardMarkup(MENU_KEYBOARD)
     chat_id = update.effective_user.id
-    question = get_random_question(quiz_bank)
+    question, _ = random.choice(list(quiz_bank.items()))
     redis_db.set(chat_id, question)
     update.message.reply_text(text=question, reply_markup=reply_markup)
     return SOLUTION_ATTEMPT
@@ -40,7 +41,7 @@ def handle_solution_attempt(bot, update, redis_db, quiz_bank):
     message_text = update.message.text
     if not question:
         return NEW_QUESTION
-    answer = get_answer(question, quiz_bank)
+    answer = question.partition('.')[0].partition('(')[0]
     if answer == message_text:
         update.message.reply_text('Правильно! Поздравляю! Для следующего вопроса нажми «Новый вопрос»',
                                   reply_markup=reply_markup)
@@ -62,7 +63,7 @@ def handle_defeat(bot, update, redis_db, quiz_bank):
     question = redis_db.get(chat_id)
     if not question:
         return NEW_QUESTION
-    answer = get_answer(question, quiz_bank)
+    answer = question.partition('.')[0].partition('(')[0]
     update.message.reply_text(f'Правильный ответ: {answer}')
     handle_new_question_request(bot, update, redis_db=redis_db, quiz_bank=quiz_bank)
 

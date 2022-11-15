@@ -31,9 +31,9 @@ pip install -r requirements.txt
 #### Подготовка данных для викторины
 * [Скачайте](https://devman.org/encyclopedia/python_intermediate/python_files/) вопросы для викторины.
 * Перенесете необходимые файлы в папку `questions`, которую необходимо создать в корне проекта. (Вы можете создать свои вопросы для викторины, но их формат должен полностью соответствовать формату скачаных файлов).
-* Запустите создание quiz_bank.json файла командой:
+* Запустите создание questions_bank.json файла командой:
 ```
-python create_quiz_bank.py
+python question_dictionary.py
 ```
 ## Запуск:
 Запустить телеграм бота:
