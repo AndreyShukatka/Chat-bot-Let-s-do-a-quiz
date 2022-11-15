@@ -1,6 +1,7 @@
 import json
 import logging
 import random
+import argparse
 
 import redis
 import telegram
@@ -14,6 +15,21 @@ from vk_api.utils import get_random_id
 from log_helpers import TelegramLogsHandler
 
 logger = logging.getLogger('vk_bot')
+
+
+
+def input_parsing_command_line():
+    parser = argparse.ArgumentParser(
+        description='Телеграм ВК'
+    )
+    parser.add_argument(
+        '--path',
+        help='укажите путь json файла в формате:"*.json"',
+        default='questions_bank.json',
+        type=str
+    )
+    args = parser.parse_args()
+    return args
 
 
 def handle_new_question_request(event, vk_api, keyboard, redis_db, quiz_bank):
@@ -62,6 +78,8 @@ def main():
 
     env = Env()
     env.read_env()
+    args = input_parsing_command_line()
+    path = args.path
     vk_token = env('VK_TOKEN')
     vk_session = vk.VkApi(token=vk_token)
     vk_api = vk_session.get_api()
@@ -79,7 +97,7 @@ def main():
     quiz_db = redis.Redis(host=redis_address, port=redis_port, password=redis_password,
                           charset='utf-8', decode_responses=True)
 
-    with open('questions_bank.json', 'r', encoding='UTF-8') as file:
+    with open(path, 'r', encoding='UTF-8') as file:
         quiz_bank = json.load(file)
 
     menu_keyboard = VkKeyboard(one_time=True)
