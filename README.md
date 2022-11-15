@@ -21,10 +21,10 @@ pip install -r requirements.txt
 ```
 #### Переменные окружения
 Запишите переменные окружения в файле .env в формате КЛЮЧ=ЗНАЧЕНИЕ:
-* `TG_TOKEN` - Телеграм токен. Получить у [BotFather](https://telegram.me/BotFather).
-* `VK_GROUP_TOKEN` - Токен группы в VK. Получить в настройках группы, в меню “Работа с API”.
-* 'TG_CHAT_ID' - ID чата в телеграм, в который будут приходить логи.
-* 'REDIS_ADDRESS' - Адрес базы данных redis.
+* `TGM_TOKEN` - Телеграм токен. Получить у [BotFather](https://telegram.me/BotFather).
+* `VK_TOKEN` - Токен группы в VK. Получить в настройках группы, в меню “Работа с API”.
+* `TGM_ID` - ID чата в телеграм, в который будут приходить логи.
+* `REDIS_ADDRESS` - Адрес базы данных redis.
 * `REDIS_PORT` - Порт базы данных redis
 * `REDIS_PASSWORD` - Пароль базы данных redis
 
