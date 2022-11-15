@@ -1,6 +1,25 @@
 import json
 import os
+import argparse
 
+def input_parsing_command_line():
+    parser = argparse.ArgumentParser(
+        description='Программа переводит txt файлы в json'
+    )
+    parser.add_argument(
+        '--folder',
+        help='укажите папку с которой брать файлы для перевода',
+        default='questions',
+        type=str
+    )
+    parser.add_argument(
+        '--path',
+        help='укажите путь json файла в формате:"*.json"',
+        default='questions_bank.json',
+        type=str
+    )
+    args = parser.parse_args()
+    return args
 
 def get_question_and_answer(quiz_question):
     quiz_question = quiz_question.split('\n\n')
@@ -14,7 +33,7 @@ def get_question_and_answer(quiz_question):
     return beautiful_question, answer
 
 
-def get_quiz_bank(folder='questions'):
+def get_quiz_bank(folder):
     files = os.listdir(folder)
     quiz_bank = {}
     for file in files:
@@ -34,8 +53,11 @@ def save_quiz_bank(quiz_bank, path):
 
 
 def main():
-    quiz_bank = get_quiz_bank()
-    save_quiz_bank(quiz_bank, 'questions_bank.json')
+    args = input_parsing_command_line()
+    folder = args.folder
+    path = args.path
+    quiz_bank = get_quiz_bank(folder)
+    save_quiz_bank(quiz_bank, path)
 
 
 if __name__ == '__main__':
