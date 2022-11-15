@@ -1,6 +1,7 @@
 import json
 import logging
 import random
+import argparse
 from functools import partial
 
 import redis
@@ -17,6 +18,20 @@ logger = logging.getLogger('tg_bot')
 
 NEW_QUESTION, SOLUTION_ATTEMPT = range(2)
 MENU_KEYBOARD = [['Новый вопрос', 'Сдаться'], ['Мой счет']]
+
+
+def input_parsing_command_line():
+    parser = argparse.ArgumentParser(
+        description='Телеграм Бот'
+    )
+    parser.add_argument(
+        '--path',
+        help='укажите путь json файла в формате:"*.json"',
+        default='questions_bank.json',
+        type=str
+    )
+    args = parser.parse_args()
+    return args
 
 
 def start(bot, update):
@@ -77,14 +92,16 @@ def main():
     redis_port = env('REDIS_PORT')
     redis_password = env('REDIS_PASSWORD')
     tgm_token = env('TGM_TOKEN')
-
     tg_chat_id = env('TGM_ID')
+
+    args = input_parsing_command_line()
+    path = args.path
     bot = telegram.Bot(token=tgm_token)
     logger.setLevel(logging.INFO)
     logger.addHandler(TelegramLogsHandler(bot, tg_chat_id))
     logger.info('Бот для логов запущен')
 
-    with open('questions_bank.json', 'r', encoding='UTF-8') as file:
+    with open(path, 'r', encoding='UTF-8') as file:
         quiz_bank = json.load(file)
 
     question_db = redis.Redis(host=redis_address, port=redis_port, password=redis_password,
