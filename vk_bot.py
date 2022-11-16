@@ -86,7 +86,7 @@ def main():
     longpoll = VkLongPoll(vk_session)
 
     tgm_token = env('TGM_TOKEN')
-    tgm_id = env('TGM_ID')
+    tgm_id = env('TGM_CHAT_ID')
     bot = telegram.Bot(token=tgm_token)
     logger.addHandler(TelegramLogsHandler(bot, tgm_id))
     logger.info('Бот для логов запущен')
