@@ -92,7 +92,7 @@ def main():
     redis_port = env('REDIS_PORT')
     redis_password = env('REDIS_PASSWORD')
     tgm_token = env('TGM_TOKEN')
-    tg_chat_id = env('TGM_ID')
+    tg_chat_id = env('TGM_CHAT_ID')
 
     args = input_parsing_command_line()
     path = args.path
