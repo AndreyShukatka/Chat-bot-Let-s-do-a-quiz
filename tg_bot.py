@@ -20,7 +20,7 @@ NEW_QUESTION, SOLUTION_ATTEMPT = range(2)
 MENU_KEYBOARD = [['Новый вопрос', 'Сдаться'], ['Мой счет']]
 
 
-def input_parsing_command_line():
+def get_args():
     parser = argparse.ArgumentParser(
         description='Телеграм Бот'
     )
@@ -94,7 +94,7 @@ def main():
     tgm_token = env('TGM_TOKEN')
     tg_chat_id = env('TGM_CHAT_ID')
 
-    args = input_parsing_command_line()
+    args = get_args()
     path = args.path
     bot = telegram.Bot(token=tgm_token)
     logger.setLevel(logging.INFO)
