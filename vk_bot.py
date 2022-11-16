@@ -18,7 +18,7 @@ logger = logging.getLogger('vk_bot')
 
 
 
-def input_parsing_command_line():
+def get_args():
     parser = argparse.ArgumentParser(
         description='Телеграм ВК'
     )
@@ -78,7 +78,7 @@ def main():
 
     env = Env()
     env.read_env()
-    args = input_parsing_command_line()
+    args = get_args()
     path = args.path
     vk_token = env('VK_TOKEN')
     vk_session = vk.VkApi(token=vk_token)
