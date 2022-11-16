@@ -2,7 +2,7 @@ import json
 import os
 import argparse
 
-def input_parsing_command_line():
+def get_args():
     parser = argparse.ArgumentParser(
         description='Программа переводит txt файлы в json'
     )
@@ -53,7 +53,7 @@ def save_quiz_bank(quiz_bank, path):
 
 
 def main():
-    args = input_parsing_command_line()
+    args = get_args()
     folder = args.folder
     path = args.path
     quiz_bank = get_quiz_bank(folder)
